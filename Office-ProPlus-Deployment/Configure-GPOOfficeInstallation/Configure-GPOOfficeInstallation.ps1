@@ -1,4 +1,4 @@
-Add-Type -TypeDefinition @"
+﻿Add-Type -TypeDefinition @"
    public enum OfficeVersion
    {
       Office2013,
@@ -355,3 +355,4 @@ Function Configure-GPOOfficeInstallation {
 
 
 }
+

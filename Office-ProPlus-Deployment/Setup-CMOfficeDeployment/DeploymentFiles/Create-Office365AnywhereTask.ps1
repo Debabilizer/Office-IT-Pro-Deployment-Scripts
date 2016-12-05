@@ -296,3 +296,4 @@ if (Test-Path -Path "$scriptRoot\Update-Office365Anywhere.ps1") {
     -ValidateUpdateSourceFiles $ValidateUpdateSourceFiles `
     -UseScriptLocationAsUpdateSource $UseScriptLocationAsUpdateSource
 }
+

@@ -73,3 +73,4 @@ Will create the GPO named "SuppressMSOffice2016" no domain will be assigned
         Write-Host "The Group Policy will not become Active until it linked to an Active Directory Organizational Unit (OU)." `
                    "In Group Policy Management Console link the GPO titled '$gpoName' to the proper OU in your environment." -BackgroundColor Red -ForegroundColor White
     }
+

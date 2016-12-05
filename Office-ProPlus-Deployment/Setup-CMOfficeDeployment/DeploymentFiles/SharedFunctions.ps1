@@ -1,4 +1,4 @@
-try {
+﻿try {
 $enumDef = "
 using System;
        [FlagsAttribute]
@@ -1901,3 +1901,4 @@ function Remove-ProductLanguage() {
     }
    }
 }
+

@@ -1,4 +1,4 @@
-
+ï»¿
 <#
 .Synopsis
 Deploys the Office Telemetry Dashboard and its components
@@ -188,9 +188,9 @@ function Read-UserResponse([string] $message) {
 }
 
 #Get existing SQL information
-function Get-SqlInstance {  
+function Get-SqlInstance { ï¿½
 
-    [cmdletbinding()] 
+    [cmdletbinding()]ï¿½
     Param (
         [parameter(ValueFromPipeline=$True,ValueFromPipelineByPropertyName=$True)]
         [Alias('__Server','DNSHostName','IPAddress')]
@@ -998,3 +998,4 @@ $SqlServerName = Get-SqlServerName
 
         Write-RegFile $folderName
     }
+

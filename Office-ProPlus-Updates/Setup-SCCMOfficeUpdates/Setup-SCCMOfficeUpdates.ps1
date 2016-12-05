@@ -1,4 +1,4 @@
-Add-Type  -ErrorAction SilentlyContinue -TypeDefinition @"
+﻿Add-Type  -ErrorAction SilentlyContinue -TypeDefinition @"
    public enum OfficeCTRVersion
    {
       Office2013,
@@ -729,3 +729,4 @@ Function Get-Site([string[]]$computerName = $env:COMPUTERNAME) {
         Return $SiteCode 
     } 
 }
+
