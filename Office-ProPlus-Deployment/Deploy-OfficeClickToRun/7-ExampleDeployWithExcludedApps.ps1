@@ -16,6 +16,7 @@ Process {
 . $scriptPath\Generate-ODTConfigurationXML.ps1
 . $scriptPath\Edit-OfficeConfigurationFile.ps1
 . $scriptPath\Install-OfficeClickToRun.ps1
+. $scriptPath\SharedFunctions.ps1
 
 $targetFilePath = "$env:temp\configuration.xml"
 

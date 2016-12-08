@@ -18,6 +18,7 @@ Process {
 . $scriptPath\Edit-OfficeConfigurationFile.ps1
 . $scriptPath\Install-OfficeClickToRun.ps1
 
+
 $targetFilePath = "$env:temp\configuration.xml"
 
 $SourcePath = $scriptPath

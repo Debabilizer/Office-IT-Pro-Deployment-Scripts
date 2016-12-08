@@ -17,6 +17,8 @@ Process {
 . $scriptPath\Edit-OfficeConfigurationFile.ps1
 . $scriptPath\Install-OfficeClickToRun.ps1
 . $scriptPath\Dynamic-UpdateSource.ps1
+. $scriptPath\SharedFunctions.ps1
+
 
 
 $targetFilePath = "$env:temp\configuration.xml"
