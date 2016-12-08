@@ -857,41 +857,46 @@ Function Validate-UpdateSource() {
         [string] $UpdateSource = $NULL,
 
         [Parameter()]
-        [string] $Bitness = $NULL,
+        [string] $OfficeClientEdition,
+        
+        [Parameter()]
+        [string] $Bitness = "x86",
 
         [Parameter()]
-        [string[]] $OfficeLanguages = $NULL,
+        [string[]] $OfficeLanguages = $null,
 
         [Parameter()]
         [bool]$ShowMissingFiles = $true
     )
+    
+    if(!$OfficeClientEdition)
+        {
+            #checking if office client edition is null, if not, set bitness to client office edition
+        }
+        else
+        {
+            $Bitness = $OfficeClientEdition
+        }
 
     [bool]$validUpdateSource = $true
     [string]$cabPath = ""
 
     if ($UpdateSource) {
         $mainRegPath = Get-OfficeCTRRegPath
-
-        if(!$Bitness){
-            $Bitness = "32"
-        }
-
-        $currentplatform = $Bitness
-
-        if ($currentplatform -eq "x64") {
-            $mainCab = "$UpdateSource\Office\Data\v64.cab"
-            $Bitness = "64"
-        }
-        else{
-            $mainCab = "$UpdateSource\Office\Data\v32.cab"
-            $Bitness = "32"
-        }
-
         if ($mainRegPath) {
             $configRegPath = $mainRegPath + "\Configuration"
             $currentplatform = (Get-ItemProperty HKLM:\$configRegPath -Name Platform -ErrorAction SilentlyContinue).Platform
             $updateToVersion = (Get-ItemProperty HKLM:\$configRegPath -Name UpdateToVersion -ErrorAction SilentlyContinue).UpdateToVersion
             $llcc = (Get-ItemProperty HKLM:\$configRegPath -Name ClientCulture -ErrorAction SilentlyContinue).ClientCulture
+        }
+
+        $currentplatform = $Bitness
+
+        $mainCab = "$UpdateSource\Office\Data\v32.cab"
+        $bitness = "32"
+        if ($currentplatform -eq "x64") {
+            $mainCab = "$UpdateSource\Office\Data\v64.cab"
+            $bitness = "64"
         }
 
         if (!($updateToVersion)) {
@@ -901,7 +906,7 @@ Function Validate-UpdateSource() {
            }
         }
 
-        [xml]$xml = Get-ChannelXml -Bitness $Bitness
+        [xml]$xml = Get-ChannelXml -Bitness $bitness
         if ($OfficeLanguages) {
           $languages = $OfficeLanguages
         } else {
@@ -939,10 +944,10 @@ Function Validate-UpdateSource() {
               $fileExists = $missingFiles.Contains($fullPath)
               if (!($fileExists)) {
                  $missingFiles.Add($fullPath)
-                 if($ShowMissingFiles -eq $true){
+                 if($ShowMissingFiles){
                     Write-Host "Source File Missing: $fullPath"
-                    Write-Log -Message "Source File Missing: $fullPath" -severity 1 -component "Office 365 Update Anywhere" 
                  }
+                 Write-Log -Message "Source File Missing: $fullPath" -severity 1 -component "Office 365 Update Anywhere" 
               }     
               $validUpdateSource = $false
            }
@@ -1053,12 +1058,39 @@ function Detect-Channel {
 
    )
 
-   Process {
-      $currentBaseUrl = Get-OfficeCDNUrl
+   Process {      
       $channelXml = Get-ChannelXml
 
-      $currentChannel = $channelXml.UpdateFiles.baseURL | Where {$_.URL -eq $currentBaseUrl -and $_.branch -notcontains 'Business' }
-      return $currentChannel
+      $CFGUpdateChannel = (Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Office\ClickToRun\Configuration -Name UpdateChannel -ErrorAction SilentlyContinue).UpdateChannel
+      $CFGOfficeMgmtCOM = (Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Office\ClickToRun\Configuration -Name OfficeMgmtCOM -ErrorAction SilentlyContinue).OfficeMgmtCOM      
+      $UPupdatechannel = (Get-ItemProperty HKLM:\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate -Name UpdateChannel -ErrorAction SilentlyContinue).UpdateChannel      
+      $UPupdatepath = (Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Office\ClickToRun\Configuration -Name updatepath -ErrorAction SilentlyContinue).updatepath
+      $officemgmtcom = (Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Office\ClickToRun\Configuration -Name officemgmtcom -ErrorAction SilentlyContinue).officemgmtcom
+      $CFGUpdateUrl = (Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Office\ClickToRun\Configuration -Name UpdateUrl -ErrorAction SilentlyContinue).UpdateUrl
+      $currentBaseUrl = Get-OfficeCDNUrl
+
+      $CurrentChannel = $channelXml.UpdateFiles.baseURL | Where {$_.URL -eq $currentBaseUrl -and $_.branch -notcontains 'Business' }
+      
+      if($CFGUpdateUrl -ne $null -and $CFGUpdateUrl -like '*officecdn.microsoft.com*'){
+        $CurrentChannel = $channelXml.UpdateFiles.baseURL | Where {$_.URL -eq $CFGUpdateUrl -and $_.branch -notcontains 'Business' }  
+      }
+      if($officemgmtcom -ne $null -and $officemgmtcom -like '*officecdn.microsoft.com*'){
+        $CurrentChannel = $channelXml.UpdateFiles.baseURL | Where {$_.URL -eq $officemgmtcom -and $_.branch -notcontains 'Business' }  
+      }
+      if($UPupdatepath -ne $null -and $UPupdatepath -like '*officecdn.microsoft.com*'){
+        $CurrentChannel = $channelXml.UpdateFiles.baseURL | Where {$_.URL -eq $UPupdatepath -and $_.branch -notcontains 'Business' }  
+      }
+      if($UPupdatechannel -ne $null -and $UPupdatechannel -like '*officecdn.microsoft.com*'){
+        $CurrentChannel = $channelXml.UpdateFiles.baseURL | Where {$_.URL -eq $UPupdatechannel -and $_.branch -notcontains 'Business' }  
+      }
+      if($CFGOfficeMgmtCOM -ne $null -and $CFGOfficeMgmtCOM -like '*officecdn.microsoft.com*'){
+        $CurrentChannel = $channelXml.UpdateFiles.baseURL | Where {$_.URL -eq $CFGOfficeMgmtCOM -and $_.branch -notcontains 'Business' }  
+      }
+      if($CFGUpdateChannel -ne $null -and $CFGUpdateChannel -like '*officecdn.microsoft.com*'){
+        $CurrentChannel = $channelXml.UpdateFiles.baseURL | Where {$_.URL -eq $CFGUpdateChannel -and $_.branch -notcontains 'Business' }  
+      }
+
+      return $CurrentChannel
    }
 
 }

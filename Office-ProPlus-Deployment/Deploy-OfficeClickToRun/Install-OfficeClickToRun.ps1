@@ -1,4 +1,4 @@
-ï»¿try {
+try {
 Add-Type  -ErrorAction SilentlyContinue -TypeDefinition @"
    public enum OfficeCTRVersion
    {
@@ -135,6 +135,10 @@ Word, Excel, and Outlook will be pinned to the Start Menu. The PowerShell consol
     )
 
     $scriptRoot = GetScriptRoot
+	# write log
+    $lineNum = Get-CurrentLineNumber    
+    $filName = Get-CurrentFileName 
+    WriteToLogFile -LNumber $lineNum -FName $filName -ActionError "install office function, loading config file"
 
     #Load the file
     [System.XML.XMLDocument]$ConfigFile = New-Object System.XML.XMLDocument
@@ -203,7 +207,11 @@ Word, Excel, and Outlook will be pinned to the Start Menu. The PowerShell consol
     $cmdArgs = "/configure " + '"' + $TargetFilePath + '"'
 
     Write-Host "Installing Office Click-To-Run..."
-
+	# write log
+    $lineNum = Get-CurrentLineNumber    
+    $filName = Get-CurrentFileName 
+    WriteToLogFile -LNumber $lineNum -FName $filName -ActionError "Installing Office Click-To-Run..."
+	
     if ($WaitForInstallToFinish) {
         StartProcess -execFilePath $cmdLine -execParams $cmdArgs -WaitForExit $false
 
@@ -377,7 +385,7 @@ begin {
 
     $defaultDisplaySet = 'DisplayName','Version', 'ComputerName'
 
-    $defaultDisplayPropertySet = New-Object System.Management.Automation.PSPropertySet('DefaultDisplayPropertySet',[string[]]$defaultDisplaySet)
+    $defaultDisplayPropertySet = New-Object System.Management.Automation.PSPropertySet(‘DefaultDisplayPropertySet’,[string[]]$defaultDisplaySet)
     $PSStandardMembers = [System.Management.Automation.PSMemberInfo[]]@($defaultDisplayPropertySet)
 }
 
@@ -1747,7 +1755,7 @@ function GetOfficeAppVerbStatus{
 
     Begin{
         $defaultDisplaySet = 'Name','PinToStartMenuAvailable', 'PinToTaskbarAvailable'
-        $defaultDisplayPropertySet = New-Object System.Management.Automation.PSPropertySet('DefaultDisplayPropertySet',[string[]]$defaultDisplaySet)
+        $defaultDisplayPropertySet = New-Object System.Management.Automation.PSPropertySet(‘DefaultDisplayPropertySet’,[string[]]$defaultDisplaySet)
         $PSStandardMembers = [System.Management.Automation.PSMemberInfo[]]@($defaultDisplayPropertySet)
     }
 
@@ -1932,5 +1940,44 @@ function GetOfficeAppVerbStatus{
         }
 
         return $results
+    }
+}
+
+function Get-CurrentLineNumber {
+    $MyInvocation.ScriptLineNumber
+}
+
+function Get-CurrentFileName{
+    $MyInvocation.ScriptName.Substring($MyInvocation.ScriptName.LastIndexOf("\")+1)
+}
+
+function Get-CurrentFunctionName {
+    (Get-Variable MyInvocation -Scope 1).Value.MyCommand.Name;
+}
+
+Function WriteToLogFile() {
+    param( 
+      [Parameter(Mandatory=$true)]
+      [string]$LNumber,
+      [Parameter(Mandatory=$true)]
+      [string]$FName,
+      [Parameter(Mandatory=$true)]
+      [string]$ActionError
+    )
+    try{
+        $headerString = "Time".PadRight(30, ' ') + "Line Number".PadRight(15,' ') + "FileName".PadRight(60,' ') + "Action"
+        $stringToWrite = $(Get-Date -Format G).PadRight(30, ' ') + $($LNumber).PadRight(15, ' ') + $($FName).PadRight(60,' ') + $ActionError
+
+        #check if file exists, create if it doesn't   
+        $getCurrentDatePath = "C:\Windows\Temp\" + (Get-Date -Format u).Substring(0,10)+"OfficeAutoScriptLog.txt"
+        if(Test-Path $getCurrentDatePath){#if exists, append   
+            Add-Content $getCurrentDatePath $stringToWrite
+        }
+        else{#if not exists, create new
+            Add-Content $getCurrentDatePath $headerString
+            Add-Content $getCurrentDatePath $stringToWrite
+        }
+    } catch [Exception]{
+        Write-Host $_
     }
 }
