@@ -18,7 +18,7 @@ namespace Microsoft.OfficeProPlus.Downloader
     public class ProPlusDownloader
     {
         private const string OfficeVersionUrl = "http://officecdn.microsoft.com/pr/wsus/ofl.cab";
-        private const string OfficeVersionHistoryUrl = "http://officecdn.microsoft.com/pr/wsus/releasehistory.cab";
+        private const string OfficeVersionHistoryUrl = "http://officecdn.microsoft.com/pr/wsus/releasehistory.cab"; 
 
         private List<UpdateFiles> _updateFiles { get; set; }
 
