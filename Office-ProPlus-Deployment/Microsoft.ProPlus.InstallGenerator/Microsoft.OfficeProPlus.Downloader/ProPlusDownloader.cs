@@ -558,7 +558,8 @@ namespace Microsoft.OfficeProPlus.Downloader
             var channelVersionJson = "";
             using (var webClient = new WebClient())
             {
-               channelVersionJson = await webClient.DownloadStringTaskAsync(AppSettings.BranchVersionUrl);
+                channelVersionJson = await webClient.DownloadStringTaskAsync("https://microsoft-apiapp2f1d0adbd6b6403da68a8cd3e1888ddc.azurewebsites.net/api/Channel");
+                //channelVersionJson = await webClient.DownloadStringTaskAsync(AppSettings.BranchVersionUrl);
             }
             return channelVersionJson;
         }

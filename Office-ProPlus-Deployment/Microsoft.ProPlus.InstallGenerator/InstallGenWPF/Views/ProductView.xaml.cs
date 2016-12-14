@@ -39,10 +39,12 @@ namespace MetroDemo.ExampleViews
         public event MessageEventHandler InfoMessage;
         public event MessageEventHandler ErrorMessage;
 
+        //private readonly  _versionDownloader = null;
         private Task _downloadTask = null;
         private int _cachedIndex = 0;
         private bool _blockUpdate = false;
-        private bool chBxMainProductFirstInitialize = true;        
+        private bool chBxMainProductFirstInitialize = true;
+        private List<Build> ProductVersionsAndBuilds;
         
 
         public ProductView()
@@ -58,7 +60,8 @@ namespace MetroDemo.ExampleViews
                 // LoadExcludedProducts();
                 cbProject.IsEnabled = false;
                 cbVisio.IsEnabled = false;
-                CbSkype.IsEnabled = false;           
+                CbSkype.IsEnabled = false;     
+                //ProductVersionsAndBuilds =       
                 if (MainTabControl == null) return;
                 MainTabControl.SelectedIndex = 0;
 
