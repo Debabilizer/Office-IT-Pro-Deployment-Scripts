@@ -701,8 +701,12 @@ namespace MetroDemo.ExampleViews
         {
             var branch = (OfficeBranch)ProductBranch.SelectedItem;
             if (branch == null) return;
-            ProductVersion.ItemsSource = branch.Versions;
+            ProductVersion.ItemsSource = branch.Versions;//.Select(v => v.NewVersion);
+            NewVersion.ItemsSource = branch.Versions;//.Select(b => b.NewBuild);
+            ProductBuild.ItemsSource = branch.Versions;
             ProductVersion.SetValue(TextBoxHelper.WatermarkProperty, branch.CurrentVersion);
+            NewVersion.SetValue(TextBoxHelper.WatermarkProperty, branch.Versions[0].NewVersion);
+            ProductBuild.SetValue(TextBoxHelper.WatermarkProperty, branch.Versions[0].NewBuild);
 
             var officeEdition = OfficeEdition.Office32Bit;
             if (ProductEdition64Bit.IsChecked.HasValue && ProductEdition64Bit.IsChecked.Value)

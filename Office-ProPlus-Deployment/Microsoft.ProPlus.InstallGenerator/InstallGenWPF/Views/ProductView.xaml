@@ -306,12 +306,12 @@
                                               Height="35" HorizontalAlignment="Left" IsTextSearchEnabled="True"
                                               Style="{StaticResource MetroComboBoxStyle}" 
                                               Controls:TextBoxHelper.Watermark=""
-                                              DisplayMemberPath="Version"
+                                              DisplayMemberPath="NewVersion"
                                               IsEditable="True"
-                                              ItemsSource="{Binding NewVersions}"
+                                              ItemsSource="{Binding Builds}"
                                               MaxDropDownHeight="125"
                                               FontSize="20"
-                                              Text="{Binding Path=NewProductVersion}" FontFamily="Segoe UI Semilight"  />
+                                              Text="{Binding Path=NewVersion}" FontFamily="Segoe UI Semilight"  />
                                     <Label Content="Build" Style="{StaticResource CustomMetroLabelHeader}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" />
 
 
@@ -319,12 +319,12 @@
                                               Height="35" HorizontalAlignment="Left" IsTextSearchEnabled="True"
                                               Style="{StaticResource MetroComboBoxStyle}" 
                                               Controls:TextBoxHelper.Watermark=""
-                                              DisplayMemberPath="Version"
+                                              DisplayMemberPath="NewBuild"
                                               IsEditable="True"
-                                              ItemsSource="{Binding NewBuilds}"
+                                              ItemsSource="{Binding Builds}"
                                               MaxDropDownHeight="125"
                                               FontSize="20"
-                                              Text="{Binding Path=NewProductBuild}" FontFamily="Segoe UI Semilight"  />
+                                              Text="{Binding Path=NewBuild}" FontFamily="Segoe UI Semilight"  />
                                     <Button x:Name="VersionInfo" Width="30" Height="32" HorizontalAlignment="Center"  Grid.Row="2"
                                                 Focusable="False"  Style="{StaticResource MetroInfoButton}" Click="ProductInfo_OnClick"  >
                                         <StackPanel Orientation="Horizontal">
