@@ -309,6 +309,7 @@
                                               DisplayMemberPath="NewVersion"
                                               IsEditable="True"
                                               ItemsSource="{Binding Builds}"
+                                              SelectionChanged="NewVersion_SelectionChanged"
                                               MaxDropDownHeight="125"
                                               FontSize="20"
                                               Text="{Binding Path=NewVersion}" FontFamily="Segoe UI Semilight"  />
@@ -322,6 +323,7 @@
                                               DisplayMemberPath="NewBuild"
                                               IsEditable="True"
                                               ItemsSource="{Binding Builds}"
+                                              SelectionChanged="ProductBuild_SelectionChanged"
                                               MaxDropDownHeight="125"
                                               FontSize="20"
                                               Text="{Binding Path=NewBuild}" FontFamily="Segoe UI Semilight"  />

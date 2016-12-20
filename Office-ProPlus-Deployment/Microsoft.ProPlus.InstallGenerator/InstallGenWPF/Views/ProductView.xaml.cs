@@ -701,9 +701,16 @@ namespace MetroDemo.ExampleViews
         {
             var branch = (OfficeBranch)ProductBranch.SelectedItem;
             if (branch == null) return;
+            var selectVersion = new OfficeBranch();
+            selectVersion.Versions = new List<Build>();
+            var selectBuilds = new OfficeBranch();
+            selectBuilds.Versions = new List<Build>();
+            selectVersion.Versions.AddRange(branch.Versions.GroupBy(v => v.NewVersion).Select(v => v.First()).ToList());
+            selectBuilds.Versions.AddRange(branch.Versions.Where(v => v.NewVersion == branch.Versions[0].NewVersion));
             ProductVersion.ItemsSource = branch.Versions;//.Select(v => v.NewVersion);
-            NewVersion.ItemsSource = branch.Versions;//.Select(b => b.NewBuild);
-            ProductBuild.ItemsSource = branch.Versions;
+            
+            NewVersion.ItemsSource = selectVersion.Versions;//.Select(b => b.NewBuild);
+            ProductBuild.ItemsSource = selectBuilds.Versions;
             ProductVersion.SetValue(TextBoxHelper.WatermarkProperty, branch.CurrentVersion);
             NewVersion.SetValue(TextBoxHelper.WatermarkProperty, branch.Versions[0].NewVersion);
             ProductBuild.SetValue(TextBoxHelper.WatermarkProperty, branch.Versions[0].NewBuild);
@@ -1584,6 +1591,56 @@ namespace MetroDemo.ExampleViews
             {
                 LogErrorMessage(ex);
             }
+        }
+
+        private void NewVersion_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.NewVersion.IsDropDownOpen)
+            {
+                var branch = (OfficeBranch)ProductBranch.SelectedItem;
+                if (branch == null) return;
+                var selectBuilds = new OfficeBranch();
+                if (NewVersion.SelectedValue == null)
+                {
+                    var selectingVersion = new OfficeBranch();
+                    selectingVersion.Versions = new List<Build>();
+                    selectingVersion.Versions.AddRange(branch.Versions.GroupBy(v => v.NewVersion).Select(v => v.First()).ToList());
+                    NewVersion.SelectedItem = branch.Versions[0];
+
+                }
+                selectBuilds.Versions = new List<Build>();
+                selectBuilds.Versions.AddRange(branch.Versions.Where(v => v.NewVersion == ((Build)NewVersion.SelectedValue).NewVersion));
+                ProductBuild.ItemsSource = selectBuilds.Versions;
+                ProductVersion.SelectedItem = null;
+                ProductBuild.SetValue(TextBoxHelper.WatermarkProperty, selectBuilds.Versions[0].NewBuild);
+                ProductVersion.SetValue(TextBoxHelper.WatermarkProperty, selectBuilds.Versions[0].Version);
+            }
+        }
+
+        private void ProductBuild_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var branch = (OfficeBranch)ProductBranch.SelectedItem;
+            if (branch == null || ProductBuild.SelectedValue == null) return;
+            if(NewVersion.SelectedValue == null)
+            {
+                    var selectingVersion = new OfficeBranch();
+                    selectingVersion.Versions = new List<Build>();
+                    selectingVersion.Versions.AddRange(branch.Versions.GroupBy(v => v.NewVersion).Select(v => v.First()).ToList());
+                    NewVersion.SelectedItem = branch.Versions[0];
+                
+            }
+                var selectVersion = new OfficeBranch();
+            selectVersion.Versions = new List<Build>();
+            var something = ProductVersion.ItemsSource;//selectVersion.Versions.Where(v => v.NewVersion == ((Build)ProductBuild.SelectedValue).NewBuild);
+            foreach (Build prod in ProductVersion.Items)
+            {
+                if (prod.NewBuild == ((Build)ProductBuild.SelectedValue).NewBuild && ((Build)NewVersion.SelectedValue).NewVersion == prod.NewVersion)
+                {
+                    ProductVersion.SelectedItem = prod;
+                    break;
+                }
+            }
+            //ProductVersion.SelectedIndex = branch.Versions.Select(v => v.NewBuild == ((Build)ProductBuild.SelectedValue).NewBuild);
         }
     }
 }
