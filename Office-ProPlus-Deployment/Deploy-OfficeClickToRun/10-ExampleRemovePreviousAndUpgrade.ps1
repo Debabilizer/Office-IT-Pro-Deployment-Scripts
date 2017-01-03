@@ -31,6 +31,8 @@ $targetFilePath = "$env:temp\configuration.xml"
 
 #This script additionally sets the "AcceptEULA" to "True" and the display "Level" to "None" so the install is silent.
 
+Dir "$env:LOCALAPPDATA\Microsoft\Office\*.qat" | rename-item -newname { [io.path]::ChangeExtension($_.name, "officeUI") }
+
 $officeProducts = Get-OfficeVersion -ShowAllInstalledProducts | Select *
 
 $Office2016C2RExists = $officeProducts | Where {$_.ClickToRun -eq $true -and $_.Version -like '16.*' }
