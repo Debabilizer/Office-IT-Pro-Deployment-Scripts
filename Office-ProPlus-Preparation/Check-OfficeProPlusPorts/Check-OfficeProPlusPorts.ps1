@@ -38,15 +38,15 @@ process {
 
     $results = new-object PSObject[] 0;
 
-    #$results += New-Object PSObject -Property @{Name = "Renew Product Key"; Host = "activation.sls.microsoft.com"; Port = 443; Status = "Fail"; }
-    #$results += New-Object PSObject -Property @{Name = "Validate Certificates"; Host = "crl.microsoft.com"; Port = 443; Status = "Fail"; }
-    #$results += New-Object PSObject -Property @{Name = "Validate Certificates"; Host = "crl.microsoft.com"; Port = 80; Status = "Fail"; }
-    #$results += New-Object PSObject -Property @{Name = "Identity Configuration Services"; Host = "odc.officeapps.live.com"; Port = 443; Status = "Fail"; }
-    #$results += New-Object PSObject -Property @{Name = "Identity Configuration Services"; Host = "clientconfig.microsoftonline-p.net"; Port = 443; Status = "Fail"; }
-    #$results += New-Object PSObject -Property @{Name = "Office Licensing Service"; Host = "ols.officeapps.live.com"; Port = 443; Status = "Fail"; }
-    #$results += New-Object PSObject -Property @{Name = "Redirection Services"; Host = "office15client.microsoft.com"; Port = 443; Status = "Fail"; }
-    #$results += New-Object PSObject -Property @{Name = "Installation/Update Content"; Host = "officecdn.microsoft.com"; Port = 80; Status = "Fail"; }
-    #$results += New-Object PSObject -Property @{Name = "Online Help Services"; Host = "go.microsoft.com"; Port = 80; Status = "Fail"; }
+    $results += New-Object PSObject -Property @{Name = "Renew Product Key"; Host = "activation.sls.microsoft.com"; Port = 443; Status = "Fail"; }
+    $results += New-Object PSObject -Property @{Name = "Validate Certificates"; Host = "crl.microsoft.com"; Port = 443; Status = "Fail"; }
+    $results += New-Object PSObject -Property @{Name = "Validate Certificates"; Host = "crl.microsoft.com"; Port = 80; Status = "Fail"; }
+    $results += New-Object PSObject -Property @{Name = "Identity Configuration Services"; Host = "odc.officeapps.live.com"; Port = 443; Status = "Fail"; }
+    $results += New-Object PSObject -Property @{Name = "Identity Configuration Services"; Host = "clientconfig.microsoftonline-p.net"; Port = 443; Status = "Fail"; }
+    $results += New-Object PSObject -Property @{Name = "Office Licensing Service"; Host = "ols.officeapps.live.com"; Port = 443; Status = "Fail"; }
+    $results += New-Object PSObject -Property @{Name = "Redirection Services"; Host = "office15client.microsoft.com"; Port = 443; Status = "Fail"; }
+    $results += New-Object PSObject -Property @{Name = "Installation/Update Content"; Host = "officecdn.microsoft.com"; Port = 80; Status = "Fail"; }
+    $results += New-Object PSObject -Property @{Name = "Online Help Services"; Host = "go.microsoft.com"; Port = 80; Status = "Fail"; }
     $results += New-Object PSObject -Property @{Name = "Office client only"; Host = "ocws.officeapps.live.com"; Port = 443; Status = "Fail"; }
     $results += New-Object PSObject -Property @{Name = "In app help"; Host = "ocsa.officeapps.live.com"; Port = 443; Status = "Fail"; }
     $results += New-Object PSObject -Property @{Name = "Bing image search"; Host = "insertmedia.bing.office.net"; Port = 443; Status = "Fail"; }
